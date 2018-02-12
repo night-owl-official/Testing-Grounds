@@ -64,7 +64,7 @@ For the versions available, see the [tags on this repository](https://github.com
 
 * **Daniel Grieco** - *Initial work* - [DannyDevOfficial](https://github.com/DannyDevOfficial)
 
-See also the list of [contributors](https://github.com/Testing-Grounds/contributors) who participated in this project.
+See also the list of [contributors](https://github.com/DannyDevOfficial/Testing-Grounds/graphs/contributors) who participated in this project.
 
 ## License
 
