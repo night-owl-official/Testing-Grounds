@@ -57,7 +57,7 @@ Just explain to me your intentions, submit a pull request and I'll be glad to le
 
 ## Versioning
 
-We use [Git](https://git-scm.com/) for versioning.
+I use [Git](https://git-scm.com/) for versioning.
 For the versions available, see the [tags on this repository](https://github.com/DannyDevOfficial/Testing-Grounds/tags). 
 
 ## Authors
