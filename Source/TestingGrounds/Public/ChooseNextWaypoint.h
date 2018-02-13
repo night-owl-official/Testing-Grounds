@@ -20,4 +20,8 @@ private:
 	*  (use FinishLatentTask() when returning InProgress)
 	* this function should be considered as const (don't modify state of object) if node is not instanced! */
 	virtual EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
+
+protected:
+	UPROPERTY(Editanywhere, Category = "Blackboard")
+		struct FBlackboardKeySelector WaypointIndex;	// Blackboard key selector used to choose a blackboard key from blueprint
 };
