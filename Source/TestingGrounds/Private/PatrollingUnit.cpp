@@ -2,6 +2,6 @@
 
 #include "PatrollingUnit.h"
 
-
-
-
+TArray<AActor*> APatrollingUnit::GetPatrollingPoints() const {
+	return _patrollingPoints;
+}

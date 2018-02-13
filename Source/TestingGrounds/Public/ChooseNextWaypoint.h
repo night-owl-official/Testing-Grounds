@@ -24,4 +24,7 @@ private:
 protected:
 	UPROPERTY(Editanywhere, Category = "Blackboard")
 		struct FBlackboardKeySelector WaypointIndex;	// Blackboard key selector used to choose a blackboard key from blueprint
+
+	UPROPERTY(Editanywhere, Category = "Blackboard")
+		struct FBlackboardKeySelector NextWaypoint;		// Blackboard key selector used to choose a blackboard key from blueprint
 };
