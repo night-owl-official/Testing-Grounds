@@ -14,16 +14,5 @@ class TESTINGGROUNDS_API APatrollingUnit : public ATP_ThirdPersonCharacter
 {
 	GENERATED_BODY()
 
-public:
-	/*
-	* Getter for patrolling points
-	*/
-	UFUNCTION(BlueprintCallable, Category = "Patrolling")
-		TArray<AActor*> GetPatrollingPoints() const;
-	
-protected:
-	UPROPERTY(EditInstanceOnly, Category = "Patrolling")
-		TArray<AActor*> _patrollingPoints;	// Points this unit can go to and patrol
-
 	// TODO Add other target point to the guards' initial location
 };

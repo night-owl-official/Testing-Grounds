@@ -5,7 +5,7 @@
 #include "BehaviorTree/BlackboardComponent.h"
 #include "Classes/AIController.h"
 
-#include "PatrollingUnit.h"
+#include "PatrolRoute.h"
 
 EBTNodeResult::Type UChooseNextWaypoint::ExecuteTask(UBehaviorTreeComponent& OwnerComp,
 	uint8* NodeMemory) {
@@ -22,8 +22,9 @@ EBTNodeResult::Type UChooseNextWaypoint::ExecuteTask(UBehaviorTreeComponent& Own
 	AActor* nextWaypoint =
 		Cast<AActor>(blackboardComponent->GetValueAsObject(NextWaypoint.SelectedKeyName));
 
-	// Get controlled pawn from AI controller and cast it to a patrolling unit
-	auto AIPatrollingUnit = Cast<APatrollingUnit>(OwnerComp.GetAIOwner()->GetPawn());
+	// Get controlled pawn from AI controller and cast it to a patrol route
+	auto AIPatrollingUnit = 
+		Cast<UPatrolRoute>(OwnerComp.GetAIOwner()->GetPawn()->FindComponentByClass<UPatrolRoute>());
 	// Get out if there's no pawn
 	if (!ensure(AIPatrollingUnit))
 		return EBTNodeResult::Failed;
