@@ -26,15 +26,11 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-protected:
+public:
 	/** Fires a projectile. */
 	void OnFire();
 
 public:
-	/** Gun muzzle's offset from the characters location */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
-		FVector GunOffset;
-
 	/** Sound to play each time we fire */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
 		class USoundBase* FireSound = nullptr;
@@ -44,8 +40,12 @@ public:
 		class UAnimMontage* FireAnimation = nullptr;
 
 	/** AnimInstance to to use for fire animation */
+	class UAnimInstance* AnimationInstance = nullptr;
+
+	/** Gun muzzle's offset from the characters location */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
-		class UAnimInstance* AnimationInstance = nullptr;
+	FVector GunOffset;
+
 
 private:
 	/** Projectile class to spawn */
@@ -59,5 +59,4 @@ private:
 	/** Gun mesh */
 	UPROPERTY(VisibleDefaultsOnly, Category = Mesh)
 		class USkeletalMeshComponent* Gun = nullptr;
-	
 };

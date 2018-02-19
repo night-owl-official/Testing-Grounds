@@ -21,6 +21,9 @@ class ATestingGroundsCharacter : public ACharacter
 	UPROPERTY(EditDefaultsOnly, Category = Mesh)
 	TSubclassOf<class AGun> FP_Gun;
 
+	/** Reference to the newly created gun */
+	class AGun* Gun = nullptr;
+
 	///** Location on gun mesh where projectiles should spawn. */
 	//UPROPERTY(VisibleDefaultsOnly, Category = Mesh)
 	//class USceneComponent* FP_MuzzleLocation;

@@ -92,9 +92,14 @@ void ATestingGroundsCharacter::BeginPlay()
 	if (!ensure(FP_Gun))
 		return;
 
-	AGun* gun = GetWorld()->SpawnActor<AGun>(FP_Gun);
+	Gun = GetWorld()->SpawnActor<AGun>(FP_Gun);
 	//Attach gun blueprint component to Skeleton, doing it here because the skeleton is not yet created in the constructor
-	gun->AttachToComponent(Mesh1P, FAttachmentTransformRules(EAttachmentRule::SnapToTarget, true), TEXT("GripPoint"));
+	Gun->AttachToComponent(Mesh1P, FAttachmentTransformRules(EAttachmentRule::SnapToTarget, true), TEXT("GripPoint"));
+	// Set gun's animation instance
+	Gun->AnimationInstance = Mesh1P->GetAnimInstance();
+
+	// Bind fire event
+	InputComponent->BindAction("Fire", IE_Pressed, Gun, &AGun::OnFire);
 
 	// Show or hide the two versions of the gun based on whether or not we're using motion controllers.
 	if (bUsingMotionControllers)
@@ -120,9 +125,6 @@ void ATestingGroundsCharacter::SetupPlayerInputComponent(class UInputComponent* 
 	// Bind jump events
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
-
-	//// Bind fire event
-	//PlayerInputComponent->BindAction("Fire", IE_Pressed, this, &ATestingGroundsCharacter::OnFire);
 
 	// Enable touchscreen input
 	EnableTouchscreenMovement(PlayerInputComponent);
@@ -215,7 +217,7 @@ void ATestingGroundsCharacter::EndTouch(const ETouchIndex::Type FingerIndex, con
 	}
 	if ((FingerIndex == TouchItem.FingerIndex) && (TouchItem.bMoved == false))
 	{
-		/*OnFire();*/
+		Gun->OnFire();
 	}
 	TouchItem.bIsPressed = false;
 }
