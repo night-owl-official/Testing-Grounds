@@ -2,14 +2,14 @@
 
 #include "TestingGroundsCharacter.h"
 #include "TestingGroundsProjectile.h"
-#include "Animation/AnimInstance.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/InputComponent.h"
+#include "Components/SkeletalMeshComponent.h"
 #include "GameFramework/InputSettings.h"
 #include "HeadMountedDisplayFunctionLibrary.h"
-#include "Kismet/GameplayStatics.h"
 #include "MotionControllerComponent.h"
+#include "Gun.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogFPChar, Warning, All);
 
@@ -88,8 +88,13 @@ void ATestingGroundsCharacter::BeginPlay()
 	// Call the base class  
 	Super::BeginPlay();
 
-	////Attach gun mesh component to Skeleton, doing it here because the skeleton is not yet created in the constructor
-	//FP_Gun->AttachToComponent(Mesh1P, FAttachmentTransformRules(EAttachmentRule::SnapToTarget, true), TEXT("GripPoint"));
+	// Spawn gun blueprint
+	if (!ensure(FP_Gun))
+		return;
+
+	AGun* gun = GetWorld()->SpawnActor<AGun>(FP_Gun);
+	//Attach gun blueprint component to Skeleton, doing it here because the skeleton is not yet created in the constructor
+	gun->AttachToComponent(Mesh1P, FAttachmentTransformRules(EAttachmentRule::SnapToTarget, true), TEXT("GripPoint"));
 
 	// Show or hide the two versions of the gun based on whether or not we're using motion controllers.
 	if (bUsingMotionControllers)
