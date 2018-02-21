@@ -47,7 +47,7 @@ void AGun::OnFire() {
 			if (ensure(World)) {
 				const FRotator SpawnRotation = MuzzleLocation->GetComponentRotation();
 				// MuzzleOffset is in camera space, so transform it to world space before offsetting from the character location to find the final muzzle position
-				const FVector SpawnLocation = (MuzzleLocation ? MuzzleLocation->GetComponentLocation() : GetActorLocation()) + SpawnRotation.RotateVector(GunOffset);
+				const FVector SpawnLocation = (MuzzleLocation ? MuzzleLocation->GetComponentLocation() : GetActorLocation()) /*+ SpawnRotation.RotateVector(GunOffset)*/;
 
 				//Set Spawn Collision Handling Override
 				FActorSpawnParameters ActorSpawnParams;
