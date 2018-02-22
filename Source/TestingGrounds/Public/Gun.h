@@ -31,14 +31,18 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Fire")
 	void OnFire();
 
+	/** Sets the animation instance for the 1st person character */
+	UFUNCTION(BlueprintCallable, Category = "Setup")
+	void SetAnimInstance(class UAnimInstance* AnimInstance);
+
 public:
 	/** Sound to play each time we fire */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
-		class USoundBase* FireSound = nullptr;
+	class USoundBase* FireSound = nullptr;
 
 	/** AnimMontage to play each time we fire */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
-		class UAnimMontage* FireAnimation = nullptr;
+	class UAnimMontage* FireAnimation = nullptr;
 
 	/** AnimInstance to to use for fire animation */
 	class UAnimInstance* AnimationInstance = nullptr;
@@ -47,17 +51,16 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
 	FVector GunOffset;
 
-
 private:
 	/** Projectile class to spawn */
 	UPROPERTY(EditDefaultsOnly, Category = Projectile)
-		TSubclassOf<class ATestingGroundsProjectile> ProjectileClass = nullptr;
+	TSubclassOf<class ATestingGroundsProjectile> ProjectileClass = nullptr;
 
 	/** Location on gun mesh where projectiles should spawn. */
 	UPROPERTY(VisibleDefaultsOnly, Category = Mesh)
-		class USceneComponent* MuzzleLocation = nullptr;
+	class USceneComponent* MuzzleLocation = nullptr;
 
 	/** Gun mesh */
 	UPROPERTY(VisibleDefaultsOnly, Category = Mesh)
-		class USkeletalMeshComponent* Gun = nullptr;
+	class USkeletalMeshComponent* Gun = nullptr;
 };

@@ -31,7 +31,6 @@ AGun::AGun() {
 // Called when the game starts or when spawned
 void AGun::BeginPlay() {
 	Super::BeginPlay();
-
 }
 
 // Called every frame
@@ -43,26 +42,30 @@ void AGun::Tick(float DeltaTime) {
 void AGun::OnFire() {
 	// try and fire a projectile
 	if (ensure(ProjectileClass)) {
-			UWorld* const World = GetWorld();
-			if (ensure(World)) {
-				const FRotator SpawnRotation = MuzzleLocation->GetComponentRotation();
-				// MuzzleOffset is in camera space, so transform it to world space before offsetting from the character location to find the final muzzle position
-				const FVector SpawnLocation = (MuzzleLocation ? MuzzleLocation->GetComponentLocation() : GetActorLocation()) /*+ SpawnRotation.RotateVector(GunOffset)*/;
+		UWorld* const World = GetWorld();
+		if (ensure(World)) {
+			const FRotator SpawnRotation = MuzzleLocation->GetComponentRotation();
+			// MuzzleOffset is in camera space, so transform it to world space before offsetting from the character location to find the final muzzle position
+			const FVector SpawnLocation = (MuzzleLocation ? MuzzleLocation->GetComponentLocation() : GetActorLocation()) /*+ SpawnRotation.RotateVector(GunOffset)*/;
 
-				//Set Spawn Collision Handling Override
-				FActorSpawnParameters ActorSpawnParams;
-				ActorSpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButDontSpawnIfColliding;
+			//Set Spawn Collision Handling Override
+			FActorSpawnParameters ActorSpawnParams;
+			ActorSpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButDontSpawnIfColliding;
 
-				// spawn the projectile at the muzzle
-				World->SpawnActor<ATestingGroundsProjectile>(ProjectileClass, SpawnLocation, SpawnRotation, ActorSpawnParams);
-			}
+			// spawn the projectile at the muzzle
+			World->SpawnActor<ATestingGroundsProjectile>(ProjectileClass, SpawnLocation, SpawnRotation, ActorSpawnParams);
+		}
 	}
 
-		// try and play the sound if specified
-		if (FireSound)
-			UGameplayStatics::PlaySoundAtLocation(this, FireSound, GetActorLocation());
+	// try and play the sound if specified
+	if (FireSound)
+		UGameplayStatics::PlaySoundAtLocation(this, FireSound, GetActorLocation());
 
-		// try and play a firing animation if specified
-		if (FireAnimation && AnimationInstance)
-			AnimationInstance->Montage_Play(FireAnimation, 1.f);
+	// try and play a firing animation if specified
+	if (FireAnimation && AnimationInstance)
+		AnimationInstance->Montage_Play(FireAnimation, 1.f);
+}
+
+void AGun::SetAnimInstance(UAnimInstance* AnimInstance) {
+	AnimationInstance = AnimInstance;
 }
