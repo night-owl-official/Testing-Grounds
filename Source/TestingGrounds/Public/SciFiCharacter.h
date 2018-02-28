@@ -29,7 +29,7 @@ public:
 public:
 	/** Fires a bullet */
 	UFUNCTION(BlueprintCallable, Category = "Fire")
-	void Fire() const;
+	void PullTrigger();
 
 private:
 	/** Pawn mesh: 1st person view (arms; seen only by self) */

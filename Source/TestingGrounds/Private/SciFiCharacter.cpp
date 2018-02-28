@@ -6,6 +6,8 @@
 #include "Components/SkeletalMeshComponent.h"
 #include "Gun.h"
 #include "Engine/World.h"
+#include "Components/InputComponent.h"
+#include "Perception/AISense_Hearing.h"
 
 // Sets default values
 ASciFiCharacter::ASciFiCharacter()
@@ -43,6 +45,10 @@ void ASciFiCharacter::BeginPlay()
 	Gun->AttachToComponent(Mesh1P, FAttachmentTransformRules(EAttachmentRule::SnapToTarget, true), TEXT("GripPoint"));
 	// Set gun's animation instance
 	Gun->AnimationInstance = Mesh1P->GetAnimInstance();
+
+	// Bind fire input
+	if (InputComponent)
+		InputComponent->BindAction("Fire", IE_Pressed, this, &ASciFiCharacter::PullTrigger);
 }
 
 // Called every frame
@@ -59,9 +65,14 @@ void ASciFiCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 
 }
 
-void ASciFiCharacter::Fire() const {
+void ASciFiCharacter::PullTrigger() {
 	if (!ensure(Gun))
 		return;
 
 	Gun->OnFire();
+	// Report noise event if you're the player
+	AActor* controlledActor = Cast<AActor>(GetController()->GetPawn());
+	if (controlledActor)
+		if (controlledActor->ActorHasTag(TEXT("Player")))
+			UAISense_Hearing::ReportNoiseEvent(this, controlledActor->GetActorLocation(), 1.0f, controlledActor);
 }
