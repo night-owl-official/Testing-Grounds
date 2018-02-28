@@ -26,6 +26,9 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	// Called when the pawn gets unpossessed
+	virtual void UnPossessed() override;
+
 public:
 	/** Fires a bullet */
 	UFUNCTION(BlueprintCallable, Category = "Fire")

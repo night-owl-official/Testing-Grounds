@@ -32,8 +32,10 @@ public:
 	void OnFire();
 
 	/** Sets the animation instance for the 1st person character */
-	UFUNCTION(BlueprintCallable, Category = "Setup")
-	void SetAnimInstance(class UAnimInstance* AnimInstance);
+	void SetFPAnimInstance(class UAnimInstance* AnimInstance);
+
+	/** Sets the animation instance for the 1st person character */
+	void SetTPAnimInstance(class UAnimInstance* AnimInstance);
 
 public:
 	/** Sound to play each time we fire */
@@ -42,10 +44,17 @@ public:
 
 	/** AnimMontage to play each time we fire */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
-	class UAnimMontage* FireAnimation = nullptr;
+	class UAnimMontage* FPFireMontage = nullptr;
 
-	/** AnimInstance to to use for fire animation */
-	class UAnimInstance* AnimationInstance = nullptr;
+	/** AnimMontage to play each time we fire */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
+	class UAnimMontage* TPFireMontage = nullptr;
+
+	/** AnimInstance to to use for FP fire animation */
+	class UAnimInstance* FPAnimationInstance = nullptr;
+
+	/** AnimInstance to to use for TP fire animation */
+	class UAnimInstance* TPAnimationInstance = nullptr;
 
 	/** Gun muzzle's offset from the characters location */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)

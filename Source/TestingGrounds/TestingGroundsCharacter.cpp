@@ -96,7 +96,7 @@ void ATestingGroundsCharacter::BeginPlay()
 	//Attach gun blueprint component to Skeleton, doing it here because the skeleton is not yet created in the constructor
 	Gun->AttachToComponent(Mesh1P, FAttachmentTransformRules(EAttachmentRule::SnapToTarget, true), TEXT("GripPoint"));
 	// Set gun's animation instance
-	Gun->AnimationInstance = Mesh1P->GetAnimInstance();
+	Gun->FPAnimationInstance = Mesh1P->GetAnimInstance();
 
 	// Bind fire event
 	InputComponent->BindAction("Fire", IE_Pressed, Gun, &AGun::OnFire);

@@ -42,9 +42,15 @@ void ASciFiCharacter::BeginPlay()
 
 	Gun = GetWorld()->SpawnActor<AGun>(GunBlueprint);
 	//Attach gun blueprint component to Skeleton, doing it here because the skeleton is not yet created in the constructor
-	Gun->AttachToComponent(Mesh1P, FAttachmentTransformRules(EAttachmentRule::SnapToTarget, true), TEXT("GripPoint"));
+	// Attach to FP if it's player controlled, TP if it's AI controlled
+	if (IsPlayerControlled())
+		Gun->AttachToComponent(Mesh1P, FAttachmentTransformRules(EAttachmentRule::SnapToTarget, true), TEXT("GripPoint"));
+	else
+		Gun->AttachToComponent(GetMesh(), FAttachmentTransformRules(EAttachmentRule::SnapToTarget, true), TEXT("GripPoint"));
+
 	// Set gun's animation instance
-	Gun->AnimationInstance = Mesh1P->GetAnimInstance();
+	Gun->FPAnimationInstance = Mesh1P->GetAnimInstance();
+	Gun->TPAnimationInstance = GetMesh()->GetAnimInstance();
 
 	// Bind fire input
 	if (InputComponent)
@@ -63,6 +69,14 @@ void ASciFiCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
+}
+
+void ASciFiCharacter::UnPossessed() {
+	Super::UnPossessed();
+
+	// Attach gun to the TP mesh when player dies
+	if (Gun)
+		Gun->AttachToComponent(GetMesh(), FAttachmentTransformRules(EAttachmentRule::SnapToTarget, true), TEXT("GripPoint"));
 }
 
 void ASciFiCharacter::PullTrigger() {

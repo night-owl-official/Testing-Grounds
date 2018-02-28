@@ -7,6 +7,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "Animation/AnimInstance.h"
 #include "TestingGroundsProjectile.h"
+#include "GameFramework/Controller.h"
 
 
 // Sets default values
@@ -61,11 +62,19 @@ void AGun::OnFire() {
 	if (FireSound)
 		UGameplayStatics::PlaySoundAtLocation(this, FireSound, GetActorLocation());
 
-	// try and play a firing animation if specified
-	if (FireAnimation && AnimationInstance)
-		AnimationInstance->Montage_Play(FireAnimation, 1.f);
+	// try and play a 1P firing animation if specified
+	if (FPFireMontage && FPAnimationInstance)
+		FPAnimationInstance->Montage_Play(FPFireMontage, 1.f);
+
+	// try and play a 3P firing animation if specified
+	if (TPFireMontage && TPAnimationInstance)
+		TPAnimationInstance->Montage_Play(TPFireMontage, 1.f);
 }
 
-void AGun::SetAnimInstance(UAnimInstance* AnimInstance) {
-	AnimationInstance = AnimInstance;
+void AGun::SetFPAnimInstance(UAnimInstance* AnimInstance) {
+	FPAnimationInstance = AnimInstance;
+}
+
+void AGun::SetTPAnimInstance(UAnimInstance* AnimInstance) {
+	TPAnimationInstance = AnimInstance;
 }
