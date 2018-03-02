@@ -6,7 +6,7 @@
 #include "Engine/World.h"
 #include "Kismet/GameplayStatics.h"
 #include "Animation/AnimInstance.h"
-#include "TestingGroundsProjectile.h"
+#include "SciFiRifleProjectile.h"
 #include "GameFramework/Controller.h"
 
 
@@ -54,7 +54,7 @@ void AGun::OnFire() {
 			ActorSpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButDontSpawnIfColliding;
 
 			// spawn the projectile at the muzzle
-			World->SpawnActor<ATestingGroundsProjectile>(ProjectileClass, SpawnLocation, SpawnRotation, ActorSpawnParams);
+			World->SpawnActor<ASciFiRifleProjectile>(ProjectileClass, SpawnLocation, SpawnRotation, ActorSpawnParams);
 		}
 	}
 

@@ -63,7 +63,7 @@ public:
 private:
 	/** Projectile class to spawn */
 	UPROPERTY(EditDefaultsOnly, Category = Projectile)
-	TSubclassOf<class ATestingGroundsProjectile> ProjectileClass = nullptr;
+	TSubclassOf<class ASciFiRifleProjectile> ProjectileClass = nullptr;
 
 	/** Location on gun mesh where projectiles should spawn. */
 	UPROPERTY(VisibleDefaultsOnly, Category = Mesh)
