@@ -50,6 +50,10 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
 	class UAnimMontage* TPFireMontage = nullptr;
 
+	/** AnimSequence to play when we fire */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
+	class UAnimSequence* RifleFireAnim = nullptr;
+
 	/** AnimInstance to to use for FP fire animation */
 	class UAnimInstance* FPAnimationInstance = nullptr;
 

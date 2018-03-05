@@ -8,6 +8,7 @@
 #include "Animation/AnimInstance.h"
 #include "SciFiRifleProjectile.h"
 #include "GameFramework/Controller.h"
+#include "Animation/AnimSequence.h"
 
 
 // Sets default values
@@ -37,7 +38,6 @@ void AGun::BeginPlay() {
 // Called every frame
 void AGun::Tick(float DeltaTime) {
 	Super::Tick(DeltaTime);
-
 }
 
 void AGun::OnFire() {
@@ -69,6 +69,10 @@ void AGun::OnFire() {
 	// try and play a 3P firing animation if specified
 	if (TPFireMontage && TPAnimationInstance)
 		TPAnimationInstance->Montage_Play(TPFireMontage, 1.f);
+
+	// Play the gun fire animation if it's there
+	if (RifleFireAnim)
+		Gun->PlayAnimation(RifleFireAnim, false);
 }
 
 void AGun::SetFPAnimInstance(UAnimInstance* AnimInstance) {
