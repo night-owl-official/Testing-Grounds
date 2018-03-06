@@ -26,15 +26,17 @@ public:
 protected:
 	/** Places an actor in the world at a random viable location */
 	UFUNCTION(BlueprintCallable, Category = "Spawn")
-	void PlaceActor() const;
+	void PlaceActor(TSubclassOf<AActor> objectToSpawn,
+		const int32 minAmountToSpawn,
+		const int32 maxAmountToSpawn);
 
 private:
 	/** Min point where an actor can spawn on the tile */
 	UPROPERTY(EditDefaultsOnly, Category = "Spawn")
-	FVector MinPoint = FVector(501.0f, -1591.0f, -434.0f);
+	FVector MinPoint = FVector(501.0f, -1591.0f, -484.0f);
 
 	/** Max point where an actor can spawn on the tile */
 	UPROPERTY(EditDefaultsOnly, Category = "Spawn")
-	FVector MaxPoint = FVector(3494.0f, 1391.0f, -434.0f);
+	FVector MaxPoint = FVector(3494.0f, 1391.0f, -484.0f);
 	
 };
