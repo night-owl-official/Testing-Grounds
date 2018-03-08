@@ -20,6 +20,9 @@ void ATile::BeginPlay()
 	FColor sphereColor;
 	sphereColor = CastSphere(GetActorLocation(), 300.0f) ? FColor::Red : FColor::Green;
 	DrawDebugSphere(GetWorld(), GetActorLocation(), 300.0f, 20, sphereColor, false, 10.0f);
+
+	sphereColor = CastSphere(GetActorLocation() + FVector(400.0f, 0.0f, -500.0f), 300.0f) ? FColor::Red : FColor::Green;
+	DrawDebugSphere(GetWorld(), GetActorLocation() + FVector(400.0f, 0.0f, -500.0f), 300.0f, 20, sphereColor, false, 10.0f);
 }
 
 // Called every frame
@@ -64,6 +67,6 @@ bool ATile::CastSphere(const FVector& castLocation, float radius) const {
 		castLocation,
 		castLocation,
 		FQuat::Identity,
-		ECollisionChannel::ECC_Camera,
+		ECollisionChannel::ECC_GameTraceChannel2,
 		FCollisionShape::MakeSphere(radius));
 }
