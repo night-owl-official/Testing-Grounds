@@ -31,6 +31,11 @@ protected:
 		const int32 maxAmountToSpawn);
 
 private:
+	/** Casts a sphere at the spawned actor location, used to check
+	*** if there's anything around it */
+	bool CastSphere(const FVector& castLocation, float radius) const;
+
+private:
 	/** Min point where an actor can spawn on the tile */
 	UPROPERTY(EditDefaultsOnly, Category = "Spawn")
 	FVector MinPoint = FVector(501.0f, -1591.0f, -484.0f);

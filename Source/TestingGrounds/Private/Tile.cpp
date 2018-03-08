@@ -2,6 +2,7 @@
 
 #include "Tile.h"
 #include "Engine/World.h"
+#include "DrawDebugHelpers.h"
 
 // Sets default values
 ATile::ATile()
@@ -15,14 +16,16 @@ ATile::ATile()
 void ATile::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
+	FColor sphereColor;
+	sphereColor = CastSphere(GetActorLocation(), 300.0f) ? FColor::Red : FColor::Green;
+	DrawDebugSphere(GetWorld(), GetActorLocation(), 300.0f, 20, sphereColor, false, 10.0f);
 }
 
 // Called every frame
 void ATile::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
 
 void ATile::PlaceActor(TSubclassOf<AActor> objectToSpawn,
@@ -49,4 +52,18 @@ void ATile::PlaceActor(TSubclassOf<AActor> objectToSpawn,
 			spawnedObject->AttachToActor(this, FAttachmentTransformRules::KeepRelativeTransform);
 		}
 	}
+}
+
+bool ATile::CastSphere(const FVector& castLocation, float radius) const {
+	// Store what was hit in here
+	FHitResult hitResult;
+	
+	// Cast the sphere of given radius at the given location
+	// TRUE if there is any blocking hit entry
+	return GetWorld()->SweepSingleByChannel(hitResult,
+		castLocation,
+		castLocation,
+		FQuat::Identity,
+		ECollisionChannel::ECC_Camera,
+		FCollisionShape::MakeSphere(radius));
 }
