@@ -24,16 +24,23 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 protected:
-	/** Places an actor in the world at a random viable location */
+	/** Places actors in the world at a random viable location */
 	UFUNCTION(BlueprintCallable, Category = "Spawn")
-	void PlaceActor(TSubclassOf<AActor> objectToSpawn,
+	void PlaceActors(TSubclassOf<AActor> objectToSpawn,
 		const int32 minAmountToSpawn,
-		const int32 maxAmountToSpawn);
+		const int32 maxAmountToSpawn,
+		float spawnRadiusRange);
 
 private:
 	/** Casts a sphere at the spawned actor location, used to check
 	*** if there's anything around it */
-	bool CastSphere(const FVector& castLocation, float radius) const;
+	bool IsPossibleToSpawnObject(const FVector& castLocation, float radius) const;
+
+	/** Spawns an actor at the given location */
+	void PlaceActor(TSubclassOf<AActor> toSpawn, const FVector& spawnLocation);
+
+	/** Tries to find an empty location for an object to spawn */
+	bool FindEmptyLocation(FVector& outSpawnPoint, float spawnRadius) const;
 
 private:
 	/** Min point where an actor can spawn on the tile */

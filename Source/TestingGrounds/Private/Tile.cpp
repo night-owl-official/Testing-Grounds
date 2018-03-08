@@ -16,13 +16,6 @@ ATile::ATile()
 void ATile::BeginPlay()
 {
 	Super::BeginPlay();
-
-	FColor sphereColor;
-	sphereColor = CastSphere(GetActorLocation(), 300.0f) ? FColor::Red : FColor::Green;
-	DrawDebugSphere(GetWorld(), GetActorLocation(), 300.0f, 20, sphereColor, false, 10.0f);
-
-	sphereColor = CastSphere(GetActorLocation() + FVector(400.0f, 0.0f, -500.0f), 300.0f) ? FColor::Red : FColor::Green;
-	DrawDebugSphere(GetWorld(), GetActorLocation() + FVector(400.0f, 0.0f, -500.0f), 300.0f, 20, sphereColor, false, 10.0f);
 }
 
 // Called every frame
@@ -31,9 +24,10 @@ void ATile::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 }
 
-void ATile::PlaceActor(TSubclassOf<AActor> objectToSpawn,
+void ATile::PlaceActors(TSubclassOf<AActor> objectToSpawn,
 	const int minAmountToSpawn,
-	const int maxAmountToSpawn) {
+	const int maxAmountToSpawn,
+	float spawnRadiusRange) {
 	// Make sure there is an actor to spawn
 	if (objectToSpawn) {
 		// Get random number of objects to spawn between min and max amount
@@ -41,32 +35,66 @@ void ATile::PlaceActor(TSubclassOf<AActor> objectToSpawn,
 			FMath::RandRange(minAmountToSpawn, maxAmountToSpawn);
 
 		FVector randomPointOnTile;
-		FRotator randomObjectRotation;
 		// Spawn a random amount of objects
 		for (size_t i = 0; i < RANDOM_AMOUNT_TO_SPAWN; i++) {
-			// Generate a random point on the tile
-			randomPointOnTile = FMath::RandPointInBox(FBox(MinPoint, MaxPoint));
-			// Generate a random rotation
-			randomObjectRotation = FRotator(0.0f, FMath::RandRange(0, 360), 0.0f);
-			AActor* spawnedObject = GetWorld()->SpawnActor<AActor>(objectToSpawn,
-				randomPointOnTile,
-				randomObjectRotation);
-			// Attach to its parent tile
-			spawnedObject->AttachToActor(this, FAttachmentTransformRules::KeepRelativeTransform);
+			// Place an actor only if there was an empty location
+			if (FindEmptyLocation(randomPointOnTile, spawnRadiusRange))
+				PlaceActor(objectToSpawn, randomPointOnTile);
 		}
 	}
 }
 
-bool ATile::CastSphere(const FVector& castLocation, float radius) const {
+bool ATile::IsPossibleToSpawnObject(const FVector& castLocation, float radius) const {
 	// Store what was hit in here
 	FHitResult hitResult;
 	
+	// Convert the location of the cast from local to world
+	// because that's how it's treated in function below
+	FVector globalCastLocation = ActorToWorld().TransformPosition(castLocation);
+
 	// Cast the sphere of given radius at the given location
-	// TRUE if there is any blocking hit entry
-	return GetWorld()->SweepSingleByChannel(hitResult,
-		castLocation,
-		castLocation,
+	bool hasHitAnything = GetWorld()->SweepSingleByChannel(hitResult,
+		globalCastLocation,
+		globalCastLocation,
 		FQuat::Identity,
 		ECollisionChannel::ECC_GameTraceChannel2,
 		FCollisionShape::MakeSphere(radius));
+
+	// Draw a debug sphere for visualization
+	FColor sphereColor = hasHitAnything ? FColor::Red : FColor::Green;
+	DrawDebugCapsule(GetWorld(), globalCastLocation, 0.0f, radius, FQuat::Identity, sphereColor, false, 60.0f);
+
+	// TRUE if there isn't any blocking hit entry
+	return !hasHitAnything;
+}
+
+void ATile::PlaceActor(TSubclassOf<AActor> toSpawn, const FVector& spawnLocation) {
+	// Generate a random rotation
+	FRotator randomObjectRotation = FRotator(0.0f, FMath::RandRange(0, 360), 0.0f);
+	AActor* spawnedObject = GetWorld()->SpawnActor<AActor>(toSpawn,
+		spawnLocation,
+		randomObjectRotation);
+	// Attach to its parent tile
+	spawnedObject->AttachToActor(this, FAttachmentTransformRules::KeepRelativeTransform);
+}
+
+bool ATile::FindEmptyLocation(FVector& outSpawnPoint, float spawnRadius) const {
+	// Max number of possible loops
+	const int MAX_AMOUNT_OF_LOOPS = 100;
+	// Counter used to choose how many times this should loop
+	int counter = 0;
+
+	do {
+		// Generate a random point on the tile
+		outSpawnPoint = FMath::RandPointInBox(FBox(MinPoint, MaxPoint));
+
+		// Increase counter if the spot wasn't empty
+		// TRUE if the location was empty
+		if (IsPossibleToSpawnObject(outSpawnPoint, spawnRadius))
+			return true;
+		else
+			counter++;
+	} while (counter < MAX_AMOUNT_OF_LOOPS);
+
+	return false;
 }
