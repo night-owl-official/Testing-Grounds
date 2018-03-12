@@ -37,7 +37,7 @@ private:
 	bool IsPossibleToSpawnObject(const FVector& castLocation, float radius) const;
 
 	/** Spawns an actor at the given location */
-	void PlaceActor(TSubclassOf<AActor> toSpawn, const FVector& spawnLocation);
+	void PlaceActor(TSubclassOf<AActor> toSpawn, const FVector& spawnLocation, float randomScale);
 
 	/** Tries to find an empty location for an object to spawn */
 	bool FindEmptyLocation(FVector& outSpawnPoint, float spawnRadius) const;
@@ -50,5 +50,13 @@ private:
 	/** Max point where an actor can spawn on the tile */
 	UPROPERTY(EditDefaultsOnly, Category = "Spawn")
 	FVector MaxPoint = FVector(3494.0f, 1391.0f, -484.0f);
+
+	/** Min scale a spawned object can have */
+	UPROPERTY(EditDefaultsOnly, Category = "Spawn")
+	float MinScale = 1.0f;
+
+	/** Max scale a spawned object can have */
+	UPROPERTY(EditDefaultsOnly, Category = "Spawn")
+	float MaxScale = 1.0f;
 	
 };

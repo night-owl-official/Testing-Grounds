@@ -34,12 +34,15 @@ void ATile::PlaceActors(TSubclassOf<AActor> objectToSpawn,
 		const int32 RANDOM_AMOUNT_TO_SPAWN =
 			FMath::RandRange(minAmountToSpawn, maxAmountToSpawn);
 
+		// Generate a random scale
+		float randomObjectScale = FMath::RandRange(MinScale, MaxScale);
+
 		FVector randomPointOnTile;
 		// Spawn a random amount of objects
 		for (size_t i = 0; i < RANDOM_AMOUNT_TO_SPAWN; i++) {
 			// Place an actor only if there was an empty location
-			if (FindEmptyLocation(randomPointOnTile, spawnRadiusRange))
-				PlaceActor(objectToSpawn, randomPointOnTile);
+			if (FindEmptyLocation(randomPointOnTile, spawnRadiusRange * randomObjectScale))
+				PlaceActor(objectToSpawn, randomPointOnTile, randomObjectScale);
 		}
 	}
 }
@@ -68,12 +71,14 @@ bool ATile::IsPossibleToSpawnObject(const FVector& castLocation, float radius) c
 	return !hasHitAnything;
 }
 
-void ATile::PlaceActor(TSubclassOf<AActor> toSpawn, const FVector& spawnLocation) {
+void ATile::PlaceActor(TSubclassOf<AActor> toSpawn, const FVector& spawnLocation, float randomScale) {
 	// Generate a random rotation
 	FRotator randomObjectRotation = FRotator(0.0f, FMath::RandRange(0, 360), 0.0f);
 	AActor* spawnedObject = GetWorld()->SpawnActor<AActor>(toSpawn,
 		spawnLocation,
 		randomObjectRotation);
+	// Set object scale
+	spawnedObject->SetActorScale3D(FVector(randomScale, randomScale, randomScale));
 	// Attach to its parent tile
 	spawnedObject->AttachToActor(this, FAttachmentTransformRules::KeepRelativeTransform);
 }
