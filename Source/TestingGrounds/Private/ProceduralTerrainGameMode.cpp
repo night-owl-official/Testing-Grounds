@@ -6,6 +6,12 @@
 #include "Engine/World.h"
 #include "ActorsPool.h"
 
+AProceduralTerrainGameMode::AProceduralTerrainGameMode() {
+	// Make the pool of NavMeshBoundsVolumes
+	NavMeshBoundsVolumePool =
+		CreateDefaultSubobject<UActorsPool>(TEXT("NavMeshBoundsVolumePool"));
+}
+
 void AProceduralTerrainGameMode::PopulateBoundsVolumePool() const {
 	// Array of actors that will store all the navmesh bounds volumes
 	// found in the world

@@ -3,6 +3,7 @@
 #include "Tile.h"
 #include "Engine/World.h"
 #include "DrawDebugHelpers.h"
+#include "ActorsPool.h"
 
 // Sets default values
 ATile::ATile()
@@ -22,6 +23,15 @@ void ATile::BeginPlay()
 void ATile::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+}
+
+void ATile::SetActorsPool(class UActorsPool* poolOfActors) {
+	// Make sure the argument isn't null
+	if (!poolOfActors)
+		return;
+
+	// Set it
+	actorsPool = poolOfActors;
 }
 
 void ATile::PlaceActors(TSubclassOf<AActor> objectToSpawn,

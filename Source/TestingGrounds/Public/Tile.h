@@ -23,6 +23,11 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+public:
+	/** Sets the reference to the pool of actors */
+	UFUNCTION(BlueprintCallable, Category = "Actors Pool")
+	void SetActorsPool(class UActorsPool* poolOfActors);
+
 protected:
 	/** Places actors in the world at a random viable location */
 	UFUNCTION(BlueprintCallable, Category = "Spawn")
@@ -58,5 +63,9 @@ private:
 	/** Max scale a spawned object can have */
 	UPROPERTY(EditDefaultsOnly, Category = "Spawn")
 	float MaxScale = 1.0f;
+
+	/** Pool of actors to access */
+	UPROPERTY(VisibleDefaultsOnly, Category = "Actors Pool")
+	class UActorsPool* actorsPool = nullptr;
 	
 };
