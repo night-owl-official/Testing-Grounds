@@ -63,9 +63,9 @@ bool ATile::IsPossibleToSpawnObject(const FVector& castLocation, float radius) c
 		ECollisionChannel::ECC_GameTraceChannel2,
 		FCollisionShape::MakeSphere(radius));
 
-	// Draw a debug sphere for visualization
-	FColor sphereColor = hasHitAnything ? FColor::Red : FColor::Green;
-	DrawDebugCapsule(GetWorld(), globalCastLocation, 0.0f, radius, FQuat::Identity, sphereColor, false, 60.0f);
+	//// Draw a debug sphere for visualization
+	//FColor sphereColor = hasHitAnything ? FColor::Red : FColor::Green;
+	//DrawDebugCapsule(GetWorld(), globalCastLocation, 0.0f, radius, FQuat::Identity, sphereColor, false, 60.0f);
 
 	// TRUE if there isn't any blocking hit entry
 	return !hasHitAnything;

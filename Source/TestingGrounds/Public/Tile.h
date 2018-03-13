@@ -45,11 +45,11 @@ private:
 private:
 	/** Min point where an actor can spawn on the tile */
 	UPROPERTY(EditDefaultsOnly, Category = "Spawn")
-	FVector MinPoint = FVector(501.0f, -1591.0f, -484.0f);
+	FVector MinPoint = FVector(148.0f, -1979.0f, -484.0f);
 
 	/** Max point where an actor can spawn on the tile */
 	UPROPERTY(EditDefaultsOnly, Category = "Spawn")
-	FVector MaxPoint = FVector(3494.0f, 1391.0f, -484.0f);
+	FVector MaxPoint = FVector(3878.0f, 1757.0f, -484.0f);
 
 	/** Min scale a spawned object can have */
 	UPROPERTY(EditDefaultsOnly, Category = "Spawn")
