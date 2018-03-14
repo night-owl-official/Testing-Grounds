@@ -37,23 +37,24 @@ void UActorsPool::Add(AActor* newActor) {
 	if (!newActor)
 		return;
 
-	// Temp log
-	UE_LOG(LogTemp, Warning, TEXT("%s added to the pool"), *(newActor->GetName()));
+	// Add to the pool if the item isn't in there already
+	if (!pool.Contains(newActor))
+		pool.Push(newActor);
 }
 
 AActor* UActorsPool::Lend() {
+	// Return nullptr when there are no actors in the pool
+	if (pool.Num() <= 0)
+		return nullptr;
 
-	// Temp log
-	UE_LOG(LogTemp, Warning, TEXT("Actor lend"));
-
-	return nullptr;
+	// Pop the actor from the pool and give it to the caller
+	return pool.Pop();
 }
 
 void UActorsPool::ReceiveReturn(AActor* returnedActor) {
-	// Make sure there's something to add
-	if (!returnedActor)
-		return;
-
-	// Temp log
-	UE_LOG(LogTemp, Warning, TEXT("%s returned to the pool"), *(returnedActor->GetName()));
+	// Call the Add function which does the same thing pretty much
+	Add(returnedActor);
+	
+	// Get rid of the returnedActor reference for the caller
+	returnedActor = nullptr;
 }

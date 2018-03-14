@@ -33,4 +33,8 @@ public:
 
 	/** Takes back the actor that gets returned from whoever was using it */
 	void ReceiveReturn(AActor* returnedActor);
+
+private:
+	/** The pool that contains the actors */
+	TArray<AActor*> pool;
 };
