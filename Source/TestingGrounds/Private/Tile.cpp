@@ -4,6 +4,7 @@
 #include "Engine/World.h"
 #include "DrawDebugHelpers.h"
 #include "ActorsPool.h"
+#include "AI/Navigation/NavigationSystem.h"
 
 // Sets default values
 ATile::ATile() {
@@ -133,6 +134,9 @@ void ATile::BorrowActorFromPoolAndSetItsLocation() {
 	// Borrow the actor
 	borrowedActor = actorsPool->Lend();
 	// Move its location if it was successfully borrowed
-	if (borrowedActor)
-		borrowedActor->SetActorLocation(GetActorLocation());
+	if (borrowedActor) {
+		borrowedActor->SetActorLocation(GetActorLocation() + FVector(2000.0f, 0.0f, 0.0f));
+		// Build the navigation system
+		GetWorld()->GetNavigationSystem()->Build();
+	}
 }
