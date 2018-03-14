@@ -23,4 +23,14 @@ protected:
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+
+public:
+	/** Adds the given actor to the pool */
+	void Add(AActor* newActor);
+
+	/** Lends one of its actors from the pool to whoever asks for it */
+	AActor* Lend();
+
+	/** Takes back the actor that gets returned from whoever was using it */
+	void ReceiveReturn(AActor* returnedActor);
 };

@@ -19,6 +19,9 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	// Called when the game ends or when about to be destroyed
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -47,6 +50,10 @@ private:
 	/** Tries to find an empty location for an object to spawn */
 	bool FindEmptyLocation(FVector& outSpawnPoint, float spawnRadius) const;
 
+	/** Borrows an actor (likely will be a bounds volume) from the pool
+	 ** and moves it to the current tile's location */
+	void BorrowActorFromPoolAndSetItsLocation();
+
 private:
 	/** Min point where an actor can spawn on the tile */
 	UPROPERTY(EditDefaultsOnly, Category = "Spawn")
@@ -68,4 +75,6 @@ private:
 	UPROPERTY(VisibleDefaultsOnly, Category = "Actors Pool")
 	class UActorsPool* actorsPool = nullptr;
 	
+	/** Actor that is borrowed from the pool */
+	AActor* borrowedActor = nullptr;
 };

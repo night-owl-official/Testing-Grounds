@@ -31,6 +31,9 @@ void AProceduralTerrainGameMode::AddToPool(ANavMeshBoundsVolume* navMeshBoundsVo
 	if (!ensure(navMeshBoundsVolume))
 		return;
 
-	// Temp log
-	UE_LOG(LogTemp, Warning, TEXT("NavMesh found: %s"), *navMeshBoundsVolume->GetName());
+	// Pass the bounds volume to the pool if there's one
+	if (!NavMeshBoundsVolumePool)
+		return;
+
+	NavMeshBoundsVolumePool->Add(navMeshBoundsVolume);
 }

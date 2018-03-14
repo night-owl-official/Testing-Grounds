@@ -1,7 +1,7 @@
 // Copyright dannydev. All Rights Reserved
 
 #include "ActorsPool.h"
-
+#include "GameFramework/Actor.h"
 
 // Sets default values for this component's properties
 UActorsPool::UActorsPool()
@@ -32,3 +32,28 @@ void UActorsPool::TickComponent(float DeltaTime, ELevelTick TickType, FActorComp
 	// ...
 }
 
+void UActorsPool::Add(AActor* newActor) {
+	// Make sure there's something to add
+	if (!newActor)
+		return;
+
+	// Temp log
+	UE_LOG(LogTemp, Warning, TEXT("%s added to the pool"), *(newActor->GetName()));
+}
+
+AActor* UActorsPool::Lend() {
+
+	// Temp log
+	UE_LOG(LogTemp, Warning, TEXT("Actor lend"));
+
+	return nullptr;
+}
+
+void UActorsPool::ReceiveReturn(AActor* returnedActor) {
+	// Make sure there's something to add
+	if (!returnedActor)
+		return;
+
+	// Temp log
+	UE_LOG(LogTemp, Warning, TEXT("%s returned to the pool"), *(returnedActor->GetName()));
+}
