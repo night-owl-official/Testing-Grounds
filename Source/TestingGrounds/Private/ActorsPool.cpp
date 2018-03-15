@@ -18,9 +18,6 @@ UActorsPool::UActorsPool()
 void UActorsPool::BeginPlay()
 {
 	Super::BeginPlay();
-
-	// ...
-	
 }
 
 
@@ -28,8 +25,6 @@ void UActorsPool::BeginPlay()
 void UActorsPool::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-
-	// ...
 }
 
 void UActorsPool::Add(AActor* newActor) {

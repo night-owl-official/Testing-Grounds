@@ -133,10 +133,11 @@ void ATile::BorrowActorFromPoolAndSetItsLocation() {
 
 	// Borrow the actor
 	borrowedActor = actorsPool->Lend();
+
 	// Move its location if it was successfully borrowed
-	if (borrowedActor) {
-		borrowedActor->SetActorLocation(GetActorLocation() + FVector(2000.0f, 0.0f, 0.0f));
-		// Build the navigation system
-		GetWorld()->GetNavigationSystem()->Build();
-	}
+	if (borrowedActor)
+		borrowedActor->SetActorLocation(GetActorLocation() + navMeshOffset);
+
+	// Build the navigation system
+	GetWorld()->GetNavigationSystem()->Build();
 }

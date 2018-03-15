@@ -74,6 +74,10 @@ private:
 	/** Pool of actors to access */
 	UPROPERTY(VisibleDefaultsOnly, Category = "Actors Pool")
 	class UActorsPool* actorsPool = nullptr;
+
+	/** Offset used to position the navmesh on the next tile */
+	UPROPERTY(EditDefaultsOnly, Category = "Actors Pool")
+	FVector navMeshOffset = FVector(2000.0f, 0.0f, -350.0f);
 	
 	/** Actor that is borrowed from the pool */
 	AActor* borrowedActor = nullptr;
