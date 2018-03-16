@@ -8,7 +8,7 @@
 
 // Sets default values
 ATile::ATile() {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
 }
@@ -63,6 +63,23 @@ void ATile::PlaceActors(TSubclassOf<AActor> objectToSpawn,
 	}
 }
 
+void ATile::PlaceAIPawns(TSubclassOf<APawn> pawnToSpawn,
+	const int32 minAmountToSpawn,
+	const int32 maxAmountToSpawn,
+	float spawnRadiusRange) {
+	// Make sure there is a pawn to spawn
+	if (pawnToSpawn) {
+		// Get the array of FSpawnPositions
+		TArray<FSpawnPosition> spawnPositions =
+			GenerateSpawnPositions(minAmountToSpawn, maxAmountToSpawn, spawnRadiusRange);
+
+		// Loop through the FSpawnPositions until all the pawns are placed
+		for (const FSpawnPosition& spawnPos : spawnPositions)
+			// Place it on the tile
+			PlaceAIPawn(pawnToSpawn, spawnPos);
+	}
+}
+
 TArray<FSpawnPosition> ATile::GenerateSpawnPositions(const int32 minSpawns,
 	const int32 maxSpawns,
 	const float radiusRange) const {
@@ -80,8 +97,8 @@ TArray<FSpawnPosition> ATile::GenerateSpawnPositions(const int32 minSpawns,
 		spawnPositionToAdd.scale = FMath::RandRange(MinScale, MaxScale);
 		// Generate a random rotation
 		spawnPositionToAdd.rotation = FRotator(0.0f,
-			FMath::RandRange(minSpawnedObjectRotationDeg,
-				maxSpawnedObjectRotationDeg),
+			FMath::RandRange(minSpawnedObjectRotationDeg, 
+				maxSpawnedObjectRotationDeg), 
 			0.0f);
 
 		// Place an actor only if there was an empty location
@@ -93,39 +110,34 @@ TArray<FSpawnPosition> ATile::GenerateSpawnPositions(const int32 minSpawns,
 	return spawnPositions;
 }
 
-bool ATile::IsPossibleToSpawnObject(const FVector& castLocation, float radius) const {
-	// Store what was hit in here
-	FHitResult hitResult;
-	
-	// Convert the location of the cast from local to world
-	// because that's how it's treated in function below
-	FVector globalCastLocation = ActorToWorld().TransformPosition(castLocation);
-
-	// Cast the sphere of given radius at the given location
-	bool hasHitAnything = GetWorld()->SweepSingleByChannel(hitResult,
-		globalCastLocation,
-		globalCastLocation,
-		FQuat::Identity,
-		ECollisionChannel::ECC_GameTraceChannel2,
-		FCollisionShape::MakeSphere(radius));
-
-	//// Draw a debug sphere for visualization
-	//FColor sphereColor = hasHitAnything ? FColor::Red : FColor::Green;
-	//DrawDebugCapsule(GetWorld(), globalCastLocation, 0.0f, radius, FQuat::Identity, sphereColor, false, 60.0f);
-
-	// TRUE if there isn't any blocking hit entry
-	return !hasHitAnything;
-}
-
 void ATile::PlaceActor(TSubclassOf<AActor> toSpawn, const FSpawnPosition& spawnPosition) {
 	// Spawn the actor
 	AActor* spawnedActor = GetWorld()->SpawnActor<AActor>(toSpawn,
 		spawnPosition.location,
 		spawnPosition.rotation);
-	// Set object scale
-	spawnedActor->SetActorScale3D(FVector(spawnPosition.scale));
-	// Attach to its parent tile
-	spawnedActor->AttachToActor(this, FAttachmentTransformRules::KeepRelativeTransform);
+
+	if (spawnedActor) {
+		// Set object scale
+		spawnedActor->SetActorScale3D(FVector(spawnPosition.scale));
+		// Attach to its parent tile
+		spawnedActor->AttachToActor(this, FAttachmentTransformRules::KeepRelativeTransform);
+	}
+}
+
+void ATile::PlaceAIPawn(TSubclassOf<APawn> toSpawn, const FSpawnPosition& spawnPosition) {
+	// Spawn the actor
+	APawn* spawnedPawn = GetWorld()->SpawnActor<APawn>(toSpawn,
+		spawnPosition.location,
+		spawnPosition.rotation);
+
+	if (spawnedPawn) {
+		// Spawn an AI controller for the pawn
+		spawnedPawn->SpawnDefaultController();
+		// Set pawn scale
+		spawnedPawn->SetActorScale3D(FVector(spawnPosition.scale));
+		// Attach to its parent tile
+		spawnedPawn->AttachToActor(this, FAttachmentTransformRules::KeepRelativeTransform);
+	}
 }
 
 bool ATile::FindEmptyLocation(FVector& outSpawnPoint, float spawnRadius) const {
@@ -147,6 +159,30 @@ bool ATile::FindEmptyLocation(FVector& outSpawnPoint, float spawnRadius) const {
 	} while (counter < MAX_AMOUNT_OF_LOOPS);
 
 	return false;
+}
+
+bool ATile::IsPossibleToSpawnObject(const FVector& castLocation, float radius) const {
+	// Store what was hit in here
+	FHitResult hitResult;
+
+	// Convert the location of the cast from local to world
+	// because that's how it's treated in function below
+	FVector globalCastLocation = ActorToWorld().TransformPosition(castLocation);
+
+	// Cast the sphere of given radius at the given location
+	bool hasHitAnything = GetWorld()->SweepSingleByChannel(hitResult,
+		globalCastLocation,
+		globalCastLocation,
+		FQuat::Identity,
+		ECollisionChannel::ECC_GameTraceChannel2,
+		FCollisionShape::MakeSphere(radius));
+
+	//// Draw a debug sphere for visualization
+	//FColor sphereColor = hasHitAnything ? FColor::Red : FColor::Green;
+	//DrawDebugCapsule(GetWorld(), globalCastLocation, 0.0f, radius, FQuat::Identity, sphereColor, false, 60.0f);
+
+	// TRUE if there isn't any blocking hit entry
+	return !hasHitAnything;
 }
 
 void ATile::BorrowActorFromPoolAndSetItsLocation() {

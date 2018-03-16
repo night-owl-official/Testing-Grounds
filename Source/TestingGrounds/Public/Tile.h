@@ -55,21 +55,31 @@ protected:
 		const int32 maxAmountToSpawn,
 		float spawnRadiusRange);
 
+	/** Places AI pawns in the world at a random viable location */
+	UFUNCTION(BlueprintCallable, Category = "Spawn")
+	void PlaceAIPawns(TSubclassOf<APawn> pawnToSpawn,
+		const int32 minAmountToSpawn,
+		const int32 maxAmountToSpawn,
+		float spawnRadiusRange);
+
 private:
 	/** Makes an array of FSpawnPositions with random parameters and returns it */
 	TArray<FSpawnPosition> GenerateSpawnPositions(const int32 minSpawns,
 		const int32 maxSpawns,
 		const float spawnRadius) const;
 
-	/** Casts a sphere at the spawned actor location, used to check
-	*** if there's anything around it */
-	bool IsPossibleToSpawnObject(const FVector& castLocation, float radius) const;
-
 	/** Spawns an actor at the given location */
 	void PlaceActor(TSubclassOf<AActor> toSpawn, const FSpawnPosition& spawnPosition);
 
+	/** Spawns a pawn at the given location */
+	void PlaceAIPawn(TSubclassOf<APawn> toSpawn, const FSpawnPosition& spawnPosition);
+
 	/** Tries to find an empty location for an object to spawn */
 	bool FindEmptyLocation(FVector& outSpawnPoint, float spawnRadius) const;
+
+	/** Casts a sphere at the spawned actor location, used to check
+	 ** if there's anything around it */
+	bool IsPossibleToSpawnObject(const FVector& castLocation, float radius) const;
 
 	/** Borrows an actor (likely will be a bounds volume) from the pool
 	 ** and moves it to the current tile's location */
