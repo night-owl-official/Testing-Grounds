@@ -6,6 +6,22 @@
 #include "GameFramework/Actor.h"
 #include "Tile.generated.h"
 
+/**
+ * FSpawnPosition is a struct used
+ * to have a compact form of location, rotation and scale
+ * for a newly spawned object on the tile
+ */
+USTRUCT()
+struct FSpawnPosition {
+	GENERATED_USTRUCT_BODY()
+
+public:
+	FVector location;
+	FRotator rotation;
+	float scale;
+};
+
+
 UCLASS()
 class TESTINGGROUNDS_API ATile : public AActor
 {
@@ -40,12 +56,17 @@ protected:
 		float spawnRadiusRange);
 
 private:
+	/** Makes an array of FSpawnPositions with random parameters and returns it */
+	TArray<FSpawnPosition> GenerateSpawnPositions(const int32 minSpawns,
+		const int32 maxSpawns,
+		const float spawnRadius) const;
+
 	/** Casts a sphere at the spawned actor location, used to check
 	*** if there's anything around it */
 	bool IsPossibleToSpawnObject(const FVector& castLocation, float radius) const;
 
 	/** Spawns an actor at the given location */
-	void PlaceActor(TSubclassOf<AActor> toSpawn, const FVector& spawnLocation, float randomScale);
+	void PlaceActor(TSubclassOf<AActor> toSpawn, const FSpawnPosition& spawnPosition);
 
 	/** Tries to find an empty location for an object to spawn */
 	bool FindEmptyLocation(FVector& outSpawnPoint, float spawnRadius) const;
@@ -62,6 +83,18 @@ private:
 	/** Max point where an actor can spawn on the tile */
 	UPROPERTY(EditDefaultsOnly, Category = "Spawn")
 	FVector MaxPoint = FVector(3878.0f, 1757.0f, -484.0f);
+
+	/**
+	* Min rotation in degrees for a spawned object on the tile
+	*/
+	UPROPERTY(EditDefaultsOnly, Category = "Spawn")
+	float minSpawnedObjectRotationDeg = -180.0f;
+
+	/**
+	* Max rotation in degrees for a spawned object on the tile
+	*/
+	UPROPERTY(EditDefaultsOnly, Category = "Spawn")
+	float maxSpawnedObjectRotationDeg = 180.0f;
 
 	/** Min scale a spawned object can have */
 	UPROPERTY(EditDefaultsOnly, Category = "Spawn")

@@ -19,6 +19,11 @@
 			"Name": "UE4EditorCustomize",
 			"Enabled": true,
 			"MarketplaceURL": "com.epicgames.launcher://ue/marketplace/content/0d22d9af59624886a6fccd9573fefa90"
+		},
+		{
+			"Name": "ClassTools",
+			"Enabled": true,
+			"MarketplaceURL": "com.epicgames.launcher://ue/marketplace/content/12a6e901cadc4108bdc3825745db6ead"
 		}
 	]
 }
