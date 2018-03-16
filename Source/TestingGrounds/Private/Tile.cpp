@@ -51,16 +51,10 @@ void ATile::PlaceActors(TSubclassOf<AActor> objectToSpawn,
 	const int maxAmountToSpawn,
 	float spawnRadiusRange) {
 	// Make sure there is an actor to spawn
-	if (objectToSpawn) {
-		// Get the array of FSpawnPositions
-		TArray<FSpawnPosition> spawnPositions =
-			GenerateSpawnPositions(minAmountToSpawn, maxAmountToSpawn, spawnRadiusRange);
-
-		// Loop through the FSpawnPositions until all the actors are placed
-		for (const FSpawnPosition& spawnPos : spawnPositions)
-			// Place it on the tile
-			PlaceActor(objectToSpawn, spawnPos);
-	}
+	if (objectToSpawn)
+		// Call the template function that will decide based on the type
+		// whether to call the function for spawning actors or pawns
+		RandomlyPlaceActors(objectToSpawn, minAmountToSpawn, maxAmountToSpawn, spawnRadiusRange);
 }
 
 void ATile::PlaceAIPawns(TSubclassOf<APawn> pawnToSpawn,
@@ -68,46 +62,40 @@ void ATile::PlaceAIPawns(TSubclassOf<APawn> pawnToSpawn,
 	const int32 maxAmountToSpawn,
 	float spawnRadiusRange) {
 	// Make sure there is a pawn to spawn
-	if (pawnToSpawn) {
-		// Get the array of FSpawnPositions
-		TArray<FSpawnPosition> spawnPositions =
-			GenerateSpawnPositions(minAmountToSpawn, maxAmountToSpawn, spawnRadiusRange);
-
-		// Loop through the FSpawnPositions until all the pawns are placed
-		for (const FSpawnPosition& spawnPos : spawnPositions)
-			// Place it on the tile
-			PlaceAIPawn(pawnToSpawn, spawnPos);
-	}
+	if (pawnToSpawn)
+		// Call the template function that will decide based on the type
+		// whether to call the function for spawning actors or pawns
+		RandomlyPlaceActors(pawnToSpawn, minAmountToSpawn, maxAmountToSpawn, spawnRadiusRange);
 }
 
-TArray<FSpawnPosition> ATile::GenerateSpawnPositions(const int32 minSpawns,
-	const int32 maxSpawns,
-	const float radiusRange) const {
-	// FSpawnPosition array to return
-	TArray<FSpawnPosition> spawnPositions;
+template <class T>
+void ATile::RandomlyPlaceActors(TSubclassOf<T> actorToSpawn,
+	const int32 minAmountToSpawn,
+	const int32 maxAmountToSpawn,
+	float spawnRadiusRange) {
+	// Make sure there is an actor to spawn
+	if (actorToSpawn) {
+		// Get random number of objects to spawn between min and max amount
+		const size_t RANDOM_AMOUNT_TO_SPAWN =
+			FMath::RandRange(minAmountToSpawn, maxAmountToSpawn);
 
-	// Get random number of objects to spawn between min and max amount
-	const size_t RANDOM_AMOUNT_TO_SPAWN =
-		FMath::RandRange(minSpawns, maxSpawns);
+		FSpawnPosition spawnPosition;
+		// Spawn a random amount of objects
+		for (size_t i = 0; i < RANDOM_AMOUNT_TO_SPAWN; i++) {
+			// Generate a random scale
+			spawnPosition.scale = FMath::RandRange(MinScale, MaxScale);
+			// Generate a random rotation
+			spawnPosition.rotation = FRotator(0.0f,
+				FMath::RandRange(minSpawnedObjectRotationDeg,
+					maxSpawnedObjectRotationDeg),
+				0.0f);
 
-	FSpawnPosition spawnPositionToAdd;
-	// Spawn a random amount of objects
-	for (size_t i = 0; i < RANDOM_AMOUNT_TO_SPAWN; i++) {
-		// Generate a random scale
-		spawnPositionToAdd.scale = FMath::RandRange(MinScale, MaxScale);
-		// Generate a random rotation
-		spawnPositionToAdd.rotation = FRotator(0.0f,
-			FMath::RandRange(minSpawnedObjectRotationDeg, 
-				maxSpawnedObjectRotationDeg), 
-			0.0f);
-
-		// Place an actor only if there was an empty location
-		if (FindEmptyLocation(spawnPositionToAdd.location, radiusRange * spawnPositionToAdd.scale))
-			// Add it to the array
-			spawnPositions.Add(spawnPositionToAdd);
+			// Place an actor only if there was an empty location
+			if (FindEmptyLocation(spawnPosition.location, spawnRadiusRange * spawnPosition.scale))
+				// Place the actor on the tile
+				PlaceActor(actorToSpawn, spawnPosition);
+		}
 	}
-
-	return spawnPositions;
 }
 
 void ATile::PlaceActor(TSubclassOf<AActor> toSpawn, const FSpawnPosition& spawnPosition) {
@@ -124,7 +112,7 @@ void ATile::PlaceActor(TSubclassOf<AActor> toSpawn, const FSpawnPosition& spawnP
 	}
 }
 
-void ATile::PlaceAIPawn(TSubclassOf<APawn> toSpawn, const FSpawnPosition& spawnPosition) {
+void ATile::PlaceActor(TSubclassOf<APawn> toSpawn, const FSpawnPosition& spawnPosition) {
 	// Spawn the actor
 	APawn* spawnedPawn = GetWorld()->SpawnActor<APawn>(toSpawn,
 		spawnPosition.location,

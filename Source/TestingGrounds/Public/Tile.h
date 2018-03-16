@@ -63,16 +63,18 @@ protected:
 		float spawnRadiusRange);
 
 private:
-	/** Makes an array of FSpawnPositions with random parameters and returns it */
-	TArray<FSpawnPosition> GenerateSpawnPositions(const int32 minSpawns,
-		const int32 maxSpawns,
-		const float spawnRadius) const;
+	/** Places actors in the world at a random viable location */
+	template <class T>
+	void RandomlyPlaceActors(TSubclassOf<T> actorToSpawn,
+		const int32 minAmountToSpawn,
+		const int32 maxAmountToSpawn,
+		float spawnRadiusRange);
 
 	/** Spawns an actor at the given location */
 	void PlaceActor(TSubclassOf<AActor> toSpawn, const FSpawnPosition& spawnPosition);
 
 	/** Spawns a pawn at the given location */
-	void PlaceAIPawn(TSubclassOf<APawn> toSpawn, const FSpawnPosition& spawnPosition);
+	void PlaceActor(TSubclassOf<APawn> toSpawn, const FSpawnPosition& spawnPosition);
 
 	/** Tries to find an empty location for an object to spawn */
 	bool FindEmptyLocation(FVector& outSpawnPoint, float spawnRadius) const;
