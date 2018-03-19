@@ -12,6 +12,26 @@ AProceduralTerrainGameMode::AProceduralTerrainGameMode() {
 		CreateDefaultSubobject<UActorsPool>(TEXT("NavMeshBoundsVolumePool"));
 }
 
+int32 AProceduralTerrainGameMode::GetScore() const {
+	return score;
+}
+
+void AProceduralTerrainGameMode::ResetScore() {
+	score = 0;
+}
+
+void AProceduralTerrainGameMode::ResetWasTileAlreadyConquered() {
+	wasTileAlreadyConquered = false;
+}
+
+void AProceduralTerrainGameMode::TileConquered() {
+	// Increase score and set tile conquered to true
+	if (!wasTileAlreadyConquered) {
+		score++;
+		wasTileAlreadyConquered = true;
+	}
+}
+
 void AProceduralTerrainGameMode::PopulateBoundsVolumePool() const {
 	// Array of actors that will store all the navmesh bounds volumes
 	// found in the world

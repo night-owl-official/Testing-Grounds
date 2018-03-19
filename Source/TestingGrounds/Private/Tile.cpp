@@ -5,6 +5,7 @@
 #include "DrawDebugHelpers.h"
 #include "ActorsPool.h"
 #include "AI/Navigation/NavigationSystem.h"
+#include "ProceduralTerrainGameMode.h"
 
 // Sets default values
 ATile::ATile() {
