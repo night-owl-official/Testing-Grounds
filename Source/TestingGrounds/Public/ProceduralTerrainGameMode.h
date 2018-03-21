@@ -65,12 +65,12 @@ private:
 	 * Current score based on how many tiles the user conquered
 	 */
 	UPROPERTY(VisibleDefaultsOnly, Category = "Score")
-	int32 score = 1;
+	int32 score = 0;
 
 
 	/**
 	 * Whether the current tile has already been conquered
 	 */
 	UPROPERTY(VisibleDefaultsOnly, Category = "Score")
-	bool wasTileAlreadyConquered = true;
+	bool wasTileAlreadyConquered = false;
 };
